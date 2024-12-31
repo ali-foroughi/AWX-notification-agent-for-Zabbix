@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  awx-notification-agent:
+    container_name: awx-notification-agent
+    image: reg.zcore.local/awx/awx-notification-agent:0.3
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - ZABBIX_SERVER=172.20.8.71
+      - ZABBIX_HOST=5G-awx
+      - ITEM_KEY=job_raw_data
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /usr/share/zoneinfo/:/usr/share/zoneinfo/
+    networks:
+      awx:
+
+networks:
+  awx:
+    name: awx
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.20.10.0/24
